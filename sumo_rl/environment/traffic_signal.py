@@ -146,7 +146,6 @@ class TrafficSignal:
         self.num_green_phases = len(self.green_phases)
         self.all_phases = self.green_phases.copy()
         self.green_phase_state = self.all_phases[0].state
-        print(f"Green phases states: {self.green_phase_state}")
 
         for i, p1 in enumerate(self.green_phases):
             for j, p2 in enumerate(self.green_phases):
@@ -169,8 +168,6 @@ class TrafficSignal:
                 self.all_phases.append(self.sumo.trafficlight.Phase(self.yellow_time_1, yellow_state_1))
                 self.all_phases.append(self.sumo.trafficlight.Phase(self.yellow_time_2, yellow_state_2))
 
-        # print(f"Yellow dict: {self.yellow_dict}")
-
         programs = self.sumo.trafficlight.getAllProgramLogics(self.id)
         logic = programs[0]
         logic.type = 0
@@ -190,19 +187,15 @@ class TrafficSignal:
         If the traffic signal should act, it will set the next green phase and update the next action time.
         """
         self.time_since_last_phase_change += 1
-        print(f"[DEBUG] Time since last phase change: {self.time_since_last_phase_change}")
         for i in range(len(self.timers)):
             self.timers[i].update()
 
         if self.is_yellow_1 and self.time_since_last_phase_change == self.yellow_time_1:
             key_to_access = (self.old_green_phase, self.green_phase)
-            print(f"[DEBUG] Trying to access key: {key_to_access} during yellow time 1")
-            print(f"[DEBUG] Yellow dict keys: {self.yellow_dict.keys()}")
 
             if key_to_access in self.yellow_dict:
                 yellow_phase_index = self.yellow_dict[key_to_access][1]
                 yellow_state = self.all_phases[yellow_phase_index].state
-                print(f"[DEBUG] Setting phase to yellow state-2: {yellow_state}")
                 self.sumo.trafficlight.setRedYellowGreenState(self.id, yellow_state)
             else:
                 raise KeyError(f"[ERROR] Key {key_to_access} not found in yellow_dict")
@@ -211,7 +204,6 @@ class TrafficSignal:
             self.is_yellow_2 = True
 
         if self.is_yellow_2 and self.time_since_last_phase_change == self.yellow_time_1 + self.yellow_time_2:
-            print(f"[DEBUG] Setting phase to green state: {self.all_phases[self.green_phase].state}")
             self.sumo.trafficlight.setRedYellowGreenState(self.id, self.all_phases[self.green_phase].state)
             self.is_yellow_2 = False
 
@@ -224,30 +216,21 @@ class TrafficSignal:
         new_phase = int(new_phase)
         # new_phase_state 就是一个过渡用的变量，如果确认要换相位，就把这个值改成新相位的状态
 
-        print(f"[DEBUG] Current green phase: {self.green_phase}, New phase: {new_phase}")
-        print(f"[DEBUG] Yellow dict keys: {self.yellow_dict.keys()}")
-
         if self.green_phase == new_phase:
-            print(f"[DEBUG] Green phase {self.green_phase} is the same as new phase {new_phase} ")
             self.sumo.trafficlight.setRedYellowGreenState(self.id, self.all_phases[self.green_phase].state)
             self.next_action_time = self.env.sim_step + self.delta_time
-            print(f"[DEBUG] Next action time set to: {self.next_action_time}")
 
         elif not self.can_switch():
-            print(f"[DEBUG] Cannot switch to phase {new_phase}")
             self.sumo.trafficlight.setRedYellowGreenState(self.id, self.all_phases[self.green_phase].state)
             self.next_action_time = self.env.sim_step + self.delta_time
-            print(f"[DEBUG] Next action time set to: {self.next_action_time}")
             
         else: # 确认要换
             self.new_phase_state = self.all_phases[new_phase].state
             key_to_access = (self.green_phase, new_phase)
-            print(f"[DEBUG] Trying to access key: {key_to_access}")
 
             if key_to_access in self.yellow_dict:
                 yellow_phase_index = self.yellow_dict[key_to_access][0]
                 yellow_state = self.all_phases[yellow_phase_index].state
-                print(f"[DEBUG] Setting phase to yellow state-1: {yellow_state}")
                 self.sumo.trafficlight.setRedYellowGreenState(self.id, yellow_state)
                 self.old_green_phase = self.green_phase            
                 self.green_phase = new_phase
@@ -255,8 +238,6 @@ class TrafficSignal:
                 self.update_lights()
                 self.green_phase_state = self.new_phase_state
                 self.next_action_time = self.env.sim_step + self.yellow_time_1 + self.yellow_time_2
-                print(f"[DEBUG] Green phase set to: {self.green_phase}")
-                print(f"[DEBUG] Next action time set to: {self.next_action_time}")
 
                 self.is_yellow_1 = True
                 self.time_since_last_phase_change = 0
@@ -267,17 +248,13 @@ class TrafficSignal:
         for i in range(len(self.green_phase_state)):
             if self.green_phase_state[i] in ('G', 'g'):
                 if self.timers[i].elapsed_time() < self.min_green:
-                    print(f"[DEBUG] Cannot switch. Timer for light {i} is {self.timers[i].elapsed_time()} which is less than min green time {self.min_green}")   
                     return False
-                else:
-                    print(f"[DEBUG] Can switch. Timer for light {i} is {self.timers[i].elapsed_time()} which is greater than min green time {self.min_green}")
         return True
 
     def update_lights(self):
         for i in range(len(self.green_phase_state)):
             if self.new_phase_state[i] in ('G', 'g'):
                 if self.green_phase_state[i] not in ('G', 'g'):
-                    print(f"[DEBUG] Starting timer for light {i}")
                     self.timers[i].reset(-self.yellow_time_1 - self.yellow_time_2)
 
 
