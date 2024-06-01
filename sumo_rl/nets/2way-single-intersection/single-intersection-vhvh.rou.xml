@@ -1,0 +1,30 @@
+<routes>
+  <vType accel="3.0" decel="6.0" id="CarA" length="5.0" minGap="2.5" maxSpeed="50.0" sigma="0.5" />
+  <vType accel="2.0" decel="6.0" id="CarB" length="7.5" minGap="2.5" maxSpeed="50.0" sigma="0.5" />
+  <vType accel="1.0" decel="5.0" id="CarC" length="5.0" minGap="2.5" maxSpeed="40.0" sigma="0.5" />
+  <vType accel="1.0" decel="5.0" id="CarD" length="7.5" minGap="2.5" maxSpeed="30.0" sigma="0.5" />
+  <route id="route01" edges="L9 L1 L4 L12 "/>
+  <route id="route02" edges="L9 L1 L6 L14"/>
+  <route id="route03" edges="L9 L1 L8 L16"/>
+  <route id="route04" edges="L11 L3 L6 L14"/>
+  <route id="route05" edges="L11 L3 L2 L10"/>
+  <route id="route06" edges="L11 L3 L8 L16"/>
+  <route id="route07" edges="L13 L5 L2 L10"/>
+  <route id="route08" edges="L13 L5 L4 L12"/>
+  <route id="route09" edges="L13 L5 L8 L16"/>
+  <route id="route10" edges="L15 L7 L2 L10"/>
+  <route id="route11" edges="L15 L7 L4 L12"/>
+  <route id="route12" edges="L15 L7 L6 L14"/>
+  <flow id="flow01" begin="0" end="100000" period="exp(0.1)" route="route01" type="CarA" color="1,1,0"/>
+  <flow id="flow02" begin="0" end="100000" period="exp(0.1)" route="route02" type="CarB" color="1,1,0"/>
+  <flow id="flow03" begin="0" end="100000" period="exp(0.1)" route="route03" type="CarC" color="1,1,0"/>
+  <flow id="flow04" begin="0" end="100000" period="exp(0.1)" route="route04" type="CarD" color="1,1,0"/>
+  <flow id="flow05" begin="0" end="100000" period="exp(0.1)" route="route05" type="CarA" color="1,1,0"/>
+  <flow id="flow06" begin="0" end="100000" period="exp(0.1)" route="route06" type="CarB" color="1,1,0"/>
+  <flow id="flow07" begin="0" end="100000" period="exp(0.1)" route="route07" type="CarC" color="1,1,0"/>
+  <flow id="flow08" begin="0" end="100000" period="exp(0.1)" route="route08" type="CarD" color="1,1,0"/>
+  <flow id="flow09" begin="0" end="100000" period="exp(0.1)" route="route09" type="CarA" color="1,1,0"/>
+  <flow id="flow10" begin="0" end="100000" period="exp(0.1)" route="route10" type="CarB" color="1,1,0"/>
+  <flow id="flow11" begin="0" end="100000" period="exp(0.1)" route="route11" type="CarC" color="1,1,0"/>
+  <flow id="flow12" begin="0" end="100000" period="exp(0.1)" route="route12" type="CarD" color="1,1,0"/>
+</routes>
