@@ -216,36 +216,7 @@
     </edge>
 
     <tlLogic id="junction" type="static" programID="0" offset="0">
-        <phase duration="33" state="GGGGrrrrrrrr"/>
-        <phase duration='3' state='yyyyyyyyyyyy' />
-        <phase duration="33" state="rrrGGGGrrrrr"/>
-        <phase duration='3' state='yyyyyyyyyyyy' />
-        <phase duration="33" state="rrrrrrGGGGrr"/>
-        <phase duration='3' state='yyyyyyyyyyyy' />
-        <phase duration="33" state="GrrrrrrrrGGG"/>
-        <phase duration='3' state='yyyyyyyyyyyy' />
-        <phase duration="33" state="GGrGrrGrrrrr"/>
-        <phase duration='3' state='yyyyyyyyyyyy' />
-        <phase duration="33" state="rrrGGrGrrGrr"/>
-        <phase duration='3' state='yyyyyyyyyyyy' />
-        <phase duration="33" state="GrrrrrGGrGrr"/>
-        <phase duration='3' state='yyyyyyyyyyyy' />
-        <phase duration="33" state="GrrGrrrrrGGr"/>
-        <phase duration='3' state='yyyyyyyyyyyy' />
-        <phase duration="33" state="GrrGrrGrrGrr"/>
-        <phase duration='3' state='yyyyyyyyyyyy' />
-        <phase duration="33" state="GrrGrGGrrrrr"/>
-        <phase duration='3' state='yyyyyyyyyyyy' />
-        <phase duration="33" state="rrrGrrGrGGrr"/>
-        <phase duration='3' state='yyyyyyyyyyyy' />
-        <phase duration="33" state="GrrrrrGrrGrG"/>
-        <phase duration='3' state='yyyyyyyyyyyy' />
-        <phase duration="33" state="GrGGrrrrrGrr"/>
-        <phase duration='3' state='yyyyyyyyyyyy' />
-        <phase duration="33" state="GGrrrrGGrrrr"/>
-        <phase duration='3' state='yyyyyyyyyyyy' />
-        <phase duration="33" state="rrrGGrrrrGGr"/>
-        <phase duration='3' state='yyyyyyyyyyyy' />
+    
         <phase duration="33" state="GrrrrGGrrrrG"/>
         <phase duration='3' state='yyyyyyyyyyyy' />
         <phase duration="33" state="rrGGrrrrGGrr"/>
