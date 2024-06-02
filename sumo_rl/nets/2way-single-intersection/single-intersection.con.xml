@@ -1,36 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <connections xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="https://sumo.sf.net/xsd/connections_file.xsd">
-    <connection from="L2" to="L12" fromLane="0" toLane="0"/>
-    <connection from="L2" to="L12" fromLane="0" toLane="1"/>
-    <connection from="L2" to="L12" fromLane="1" toLane="2"/>
-    <connection from="L4" to="L14" fromLane="0" toLane="0"/>
-    <connection from="L4" to="L14" fromLane="1" toLane="1"/>
-    <connection from="L4" to="L14" fromLane="1" toLane="2"/>
-    <connection from="L9" to="L11" fromLane="0" toLane="0"/>
-    <connection from="L9" to="L11" fromLane="1" toLane="1"/>
-    <connection from="L9" to="L11" fromLane="1" toLane="2"/>
-    <connection from="L9" to="L15" fromLane="1" toLane="1"/>
-    <connection from="L9" to="L15" fromLane="2" toLane="2"/>
-    <connection from="L16" to="L10" fromLane="0" toLane="0"/>
-    <connection from="L16" to="L10" fromLane="1" toLane="1"/>
-    <connection from="L16" to="L10" fromLane="1" toLane="2"/>
-    <connection from="L16" to="L11" fromLane="2" toLane="2"/>
-    <connection from="L12" to="L15" fromLane="0" toLane="0"/>
-    <connection from="L12" to="L15" fromLane="1" toLane="1"/>
-    <connection from="L12" to="L10" fromLane="1" toLane="0"/>
-    <connection from="L12" to="L10" fromLane="1" toLane="1"/>
-    <connection from="L12" to="L10" fromLane="2" toLane="2"/>
-    <connection from="L14" to="L16" fromLane="1" toLane="1"/>
-    <connection from="L14" to="L16" fromLane="1" toLane="0"/>
-    <connection from="L14" to="L16" fromLane="2" toLane="2"/>
-    <connection from="L14" to="L18" fromLane="0" toLane="0"/>
-    <connection from="L14" to="L18" fromLane="1" toLane="1"/>
-    <connection from="L14" to="L18" fromLane="1" toLane="2"/>
-    <connection from="L17" to="L16" fromLane="0" toLane="0"/>
-    <connection from="L17" to="L16" fromLane="1" toLane="1"/>
-    <connection from="L17" to="L16" fromLane="1" toLane="2"/>
-    <connection from="L17" to="L13" fromLane="1" toLane="0"/>
-    <connection from="L17" to="L13" fromLane="1" toLane="1"/>
-    <connection from="L17" to="L13" fromLane="2" toLane="2"/>
+    <!-- from north -->
+    <connection from="n_t" to="t_s" fromLane="1" toLane="1"/>
+    <connection from="n_t" to="t_w" fromLane="2" toLane="2"/>
+    <connection from="n_t" to="t_e" fromLane="0" toLane="0"/>
+    <!-- from south -->
+    <connection from="s_t" to="t_n" fromLane="1" toLane="1"/>
+    <connection from="s_t" to="t_e" fromLane="2" toLane="2"/>
+    <connection from="s_t" to="t_w" fromLane="0" toLane="0"/>
+
+    <!-- from west -->
+    <connection from="w_t" to="t_e" fromLane="1" toLane="1"/>
+    <connection from="w_t" to="t_s" fromLane="2" toLane="2"/>
+    <connection from="w_t" to="t_n" fromLane="0" toLane="0"/>
+
+    <!-- from east -->
+    <connection from="e_t" to="t_w" fromLane="1" toLane="1"/>
+    <connection from="e_t" to="t_n" fromLane="2" toLane="2"/>
+    <connection from="e_t" to="t_s" fromLane="0" toLane="0"/>
+
 </connections>

@@ -1,6 +1,6 @@
 <configuration>
     <input>
-        <net-file value="test_new.net.xml"/>
+        <net-file value="single-intersection-2.net.xml"/>
         <route-files value="single-intersection-vhvh.rou.xml"/>
     </input>
     <time>
