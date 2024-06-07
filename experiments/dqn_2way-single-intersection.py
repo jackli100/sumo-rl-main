@@ -19,21 +19,21 @@ if __name__ == "__main__":
     env = SumoEnvironment(
         net_file="sumo_rl/nets/2way-single-intersection/single-intersection-2.net.xml",
         route_file="sumo_rl/nets/2way-single-intersection/single-intersection-vhvh.rou.xml",
-        out_csv_name="outputs/2way-single-intersection/dqn",
+        out_csv_name="outputs/2way-single-intersection-l0.0001-ta2000/dqn",
         single_agent=True,
-        use_gui=True,
+        use_gui=False,
         num_seconds=100000,
     )
 
     model = DQN(
         env=env,
         policy="MlpPolicy",
-        learning_rate=0.001,
+        learning_rate=0.0001,
         learning_starts=0,
         train_freq=1,
-        target_update_interval=500,
+        target_update_interval=2000,
         exploration_initial_eps=0.05,
         exploration_final_eps=0.01,
         verbose=1,
     )
-    model.learn(total_timesteps=100000)
+    model.learn(total_timesteps=500000)

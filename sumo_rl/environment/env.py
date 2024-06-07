@@ -414,6 +414,7 @@ class SumoEnvironment(gym.Env):
         self.sumo.simulationStep()
 
     def _get_system_info(self):
+        # 获取系统参数是使用sumo的内置函数
         vehicles = self.sumo.vehicle.getIDList()
         speeds = [self.sumo.vehicle.getSpeed(vehicle) for vehicle in vehicles]
         waiting_times = [self.sumo.vehicle.getWaitingTime(vehicle) for vehicle in vehicles]
@@ -423,6 +424,7 @@ class SumoEnvironment(gym.Env):
             "system_total_waiting_time": sum(waiting_times),
             "system_mean_waiting_time": 0.0 if len(vehicles) == 0 else np.mean(waiting_times),
             "system_mean_speed": 0.0 if len(vehicles) == 0 else np.mean(speeds),
+            "waiting_times": waiting_times,
         }
 
     def _get_per_agent_info(self):
