@@ -2,22 +2,22 @@
 <connections xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="https://sumo.sf.net/xsd/connections_file.xsd">
     <!-- from north -->
-    <connection from="n_t" to="t_s" fromLane="1" toLane="1"/>
-    <connection from="n_t" to="t_w" fromLane="2" toLane="2"/>
+    <connection from="n_t" to="t_s" fromLane="1" toLane="0"/>
+    <connection from="n_t" to="t_w" fromLane="2" toLane="0"/>
     <connection from="n_t" to="t_e" fromLane="0" toLane="0"/>
     <!-- from south -->
-    <connection from="s_t" to="t_n" fromLane="1" toLane="1"/>
-    <connection from="s_t" to="t_e" fromLane="2" toLane="2"/>
+    <connection from="s_t" to="t_n" fromLane="1" toLane="0"/>
+    <connection from="s_t" to="t_e" fromLane="2" toLane="0"/>
     <connection from="s_t" to="t_w" fromLane="0" toLane="0"/>
 
     <!-- from west -->
-    <connection from="w_t" to="t_e" fromLane="1" toLane="1"/>
-    <connection from="w_t" to="t_s" fromLane="2" toLane="2"/>
+    <connection from="w_t" to="t_e" fromLane="1" toLane="0"/>
+    <connection from="w_t" to="t_s" fromLane="2" toLane="0"/>
     <connection from="w_t" to="t_n" fromLane="0" toLane="0"/>
 
     <!-- from east -->
-    <connection from="e_t" to="t_w" fromLane="1" toLane="1"/>
-    <connection from="e_t" to="t_n" fromLane="2" toLane="2"/>
+    <connection from="e_t" to="t_w" fromLane="1" toLane="0"/>
+    <connection from="e_t" to="t_n" fromLane="2" toLane="0"/>
     <connection from="e_t" to="t_s" fromLane="0" toLane="0"/>
 
 </connections>

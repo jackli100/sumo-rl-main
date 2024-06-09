@@ -1,13 +1,13 @@
 <edges>
-	<edge from="n" id="n_t" to="t" numLanes="3"/>
-	<edge from="t" id="t_n" to="n" numLanes="3"/>
+	<edge from="n" id="n_t" to="t" numLanes="3" width="3.25"/>
+	<edge from="t" id="t_n" to="n" numLanes="1" width="9.75"/>
 
-	<edge from="w" id="w_t" to="t" numLanes="3"/>
-	<edge from="t" id="t_w" to="w" numLanes="3"/>
+	<edge from="w" id="w_t" to="t" numLanes="3" width="3.25"/>
+	<edge from="t" id="t_w" to="w" numLanes="1" width="9.75"/>
 
-	<edge from="t" id="t_s" to="s" numLanes="3"/>
-	<edge from="s" id="s_t" to="t" numLanes="3"/>
+	<edge from="t" id="t_s" to="s" numLanes="1" width="9.75"/>
+	<edge from="s" id="s_t" to="t" numLanes="3" width="3.25"/>
 
-	<edge from="t" id="t_e" to="e" numLanes="3"/>
-	<edge from="e" id="e_t" to="t" numLanes="3"/>
+	<edge from="t" id="t_e" to="e" numLanes="1" width="9.75"/>
+	<edge from="e" id="e_t" to="t" numLanes="3" width="3.25"/>
 </edges>
