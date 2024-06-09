@@ -99,7 +99,6 @@ class TrafficSignal:
         self.is_yellow_1 = False
         self.is_yellow_2 = False
         self.is_red = False
-        self.is_red = False
         self.time_since_last_phase_change = 0
         self.next_action_time = begin_time
         self.last_measure = 0.0

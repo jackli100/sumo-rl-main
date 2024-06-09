@@ -83,6 +83,8 @@ class SumoEnvironment(gym.Env):
         net_file: str,
         route_file: str,
         out_csv_name: Optional[str] = None,
+        vehicle_output: Optional[str] = False,
+        vehicle_output_name: str = "tripinfo.xml",
         use_gui: bool = False,
         virtual_display: Tuple[int, int] = (3200, 1800),
         begin_time: int = 0,
@@ -113,6 +115,8 @@ class SumoEnvironment(gym.Env):
 
         self._net = net_file
         self._route = route_file
+        self._vehicle_output = vehicle_output
+        self.vehicle_output_name = vehicle_output_name
         self.use_gui = use_gui
         if self.use_gui or self.render_mode is not None:
             self._sumo_binary = sumolib.checkBinary("sumo-gui")
@@ -207,6 +211,8 @@ class SumoEnvironment(gym.Env):
             "--time-to-teleport",
             str(self.time_to_teleport),
         ]
+        if self._vehicle_output:
+            sumo_cmd.extend(["--tripinfo-output", self.vehicle_output_name])
         if self.begin_time > 0:
             sumo_cmd.append(f"-b {self.begin_time}")
         if self.sumo_seed == "random":

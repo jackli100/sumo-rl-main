@@ -4,7 +4,6 @@ import sys
 import gymnasium as gym
 from stable_baselines3.dqn.dqn import DQN
 
-
 if "SUMO_HOME" in os.environ:
     tools = os.path.join(os.environ["SUMO_HOME"], "tools")
     sys.path.append(tools)
@@ -16,24 +15,19 @@ from sumo_rl import SumoEnvironment
 
 
 if __name__ == "__main__":
+    
     env = SumoEnvironment(
         net_file="sumo_rl/nets/2way-single-intersection/single-intersection-2.net.xml",
         route_file="sumo_rl/nets/2way-single-intersection/single-intersection-vhvh.rou.xml",
-        out_csv_name="outputs/2way-single-intersection-l0.0001-ta2000/dqn",
+        out_csv_name="outputs/2way-single-intersection-l0.0001-small/dqn",
         single_agent=True,
         use_gui=False,
-        num_seconds=100000,
+        num_seconds=10000,
+        vehicle_output=True,
+        vehicle_output_name="outputs/2way-single-intersection-l0.0001-small/vehicles.xml",
     )
-
-    model = DQN(
-        env=env,
-        policy="MlpPolicy",
-        learning_rate=0.0001,
-        learning_starts=0,
-        train_freq=1,
-        target_update_interval=2000,
-        exploration_initial_eps=0.05,
-        exploration_final_eps=0.01,
-        verbose=1,
-    )
-    model.learn(total_timesteps=500000)
+    # 加载模型
+    model = DQN.load("dqn_single_intersection")
+    # 将环境设置到模型中
+    model.set_env(env)
+    model.learn(total_timesteps=10000)
