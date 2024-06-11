@@ -28,14 +28,13 @@ import sys
 
 sys.path.append(os.path.join(os.environ['SUMO_HOME'], 'tools'))
 import sumolib  # noqa
-from sumolib.visualization import helpers  # noqa
+from sumolib.visualization import helpers
 import matplotlib.pyplot as plt  # noqa
 
+from optparse import OptionParser
 
 def main(args=None):
     """The main function; parses options and plots"""
-    # ---------- build and read options ----------
-    from optparse import OptionParser
     optParser = OptionParser()
     optParser.add_option("-i", "--tripinfos-inputs", dest="tripinfos", metavar="FILE",
                          help="Defines the tripinfo-output files to use as input")
@@ -46,15 +45,22 @@ def main(args=None):
     optParser.add_option("--bins", dest="bins",
                          type="int", default=20, help="Define the bin number")
     optParser.add_option("--norm", dest="norm",
-                         type="float", default=1., help="Read values will be devided by this number")
+                         type="float", default=1., help="Read values will be divided by this number")
     optParser.add_option("--minV", dest="minV",
                          type="float", default=None, help="Define the minimum value boundary")
     optParser.add_option("--maxV", dest="maxV",
                          type="float", default=None, help="Define the maximum value boundary")
-    # standard plot options
-    helpers.addInteractionOptions(optParser)
-    helpers.addPlotOptions(optParser)
-    # parse
+    
+    try:
+        helpers.addInteractionOptions(optParser)
+    except Exception as e:
+        print("Warning: An error occurred while adding interaction options:", e)
+
+    try:
+        helpers.addPlotOptions(optParser)
+    except Exception as e:
+        print("Warning: An error occurred while adding plot options:", e)
+
     options, _ = optParser.parse_args(args=args)
 
     if options.tripinfos is None:
@@ -67,7 +73,7 @@ def main(args=None):
     values = {}
     for f in files:
         if options.verbose:
-            print("Reading '%s'..." % f)
+            print(f"Reading '{f}'...")
         nums = sumolib.output.parse_sax__asList(
             f, "tripinfo", [options.measure])
         fvp = sumolib.output.toList(nums, options.measure)
@@ -87,11 +93,11 @@ def main(args=None):
         h = [0] * options.bins
         for v in values[f]:
             i = min(int((v - minV) / binWidth), options.bins - 1)
-            h[i] = h[i] + 1
+            h[i] += 1
         hists[f] = h
 
-    width = binWidth / float(len(files)) * .8
-    offset = binWidth * .1
+    width = binWidth / float(len(files)) * 0.8
+    offset = binWidth * 0.1
     center = []
     for j in range(0, options.bins):
         center.append(binWidth * j + offset)
@@ -103,6 +109,7 @@ def main(args=None):
         for j in range(options.bins):
             center[j] += width
     helpers.closeFigure(fig, ax, options)
+
 
 
 if __name__ == "__main__":

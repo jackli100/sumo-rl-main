@@ -1,0 +1,7 @@
+<routes>
+  <vType accel="2.6" decel="4.5" id="CarA" length="5.0" minGap="2.5" maxSpeed="55.55" sigma="0.5" />
+  <route id="route05" edges="s_t t_w"/>
+  <route id="route10" edges="e_t t_w"/>
+  <flow id="flow05" begin="0" end="100000" period="exp(0.6)" route="route05" type="CarA" color="1,1,0"/>
+  <flow id="flow10" begin="0" end="100000" period="exp(0.9)" route="route10" type="CarA" color="1,1,0"/>
+</routes>

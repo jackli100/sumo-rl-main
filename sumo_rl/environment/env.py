@@ -3,6 +3,7 @@ import os
 import sys
 from pathlib import Path
 from typing import Callable, Optional, Tuple, Union
+from datetime import datetime
 
 
 if "SUMO_HOME" in os.environ:
@@ -83,8 +84,6 @@ class SumoEnvironment(gym.Env):
         net_file: str,
         route_file: str,
         out_csv_name: Optional[str] = None,
-        vehicle_output: Optional[str] = False,
-        vehicle_output_name: str = "tripinfo.xml",
         use_gui: bool = False,
         virtual_display: Tuple[int, int] = (3200, 1800),
         begin_time: int = 0,
@@ -115,8 +114,6 @@ class SumoEnvironment(gym.Env):
 
         self._net = net_file
         self._route = route_file
-        self._vehicle_output = vehicle_output
-        self.vehicle_output_name = vehicle_output_name
         self.use_gui = use_gui
         if self.use_gui or self.render_mode is not None:
             self._sumo_binary = sumolib.checkBinary("sumo-gui")
@@ -211,8 +208,6 @@ class SumoEnvironment(gym.Env):
             "--time-to-teleport",
             str(self.time_to_teleport),
         ]
-        if self._vehicle_output:
-            sumo_cmd.extend(["--tripinfo-output", self.vehicle_output_name])
         if self.begin_time > 0:
             sumo_cmd.append(f"-b {self.begin_time}")
         if self.sumo_seed == "random":
@@ -258,6 +253,12 @@ class SumoEnvironment(gym.Env):
 
         if seed is not None:
             self.sumo_seed = seed
+        
+        if self.additional_sumo_cmd is not None:
+            parts = self.additional_sumo_cmd.split(".xml")
+            timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+            self.additional_sumo_cmd = f"{parts[0]}_{timestamp}.xml"
+
         self._start_simulation()
 
         if isinstance(self.reward_fn, dict):
@@ -309,6 +310,7 @@ class SumoEnvironment(gym.Env):
         Args:
             action (Union[dict, int]): action(s) to be applied to the environment.
             If single_agent is True, action is an int, otherwise it expects a dict with keys corresponding to traffic signal ids.
+
         """
         # No action, follow fixed TL defined in self.phases
         if self.fixed_ts or action is None or action == {}:
@@ -331,6 +333,9 @@ class SumoEnvironment(gym.Env):
             return observations, rewards, dones, info
 
     def _run_steps(self):
+        '''
+        直到time_to_act为True 才会停止模拟到下一个时间步
+        '''
         time_to_act = False
         while not time_to_act:
             self._sumo_step()
@@ -460,7 +465,6 @@ class SumoEnvironment(gym.Env):
         if self.disp is not None:
             self.disp.stop()
             self.disp = None
-
         self.sumo = None
 
     def __del__(self):
