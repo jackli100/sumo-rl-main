@@ -30,18 +30,16 @@ if __name__ == "__main__":
         route_file="sumo_rl/nets/2way-single-intersection/single-intersection-vhvh.rou.xml",
         out_csv_name=out_csv_name,
         single_agent=True,
-        use_gui=False,
+        use_gui=True,
         num_seconds=100000,
-        additional_sumo_cmd=tripinfo_cmd,
-        
+        reward_fn="average-speed",  
     )
     # 创建结果文件夹
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
 
     # 加载模型
-    model = DQN.load("dqn_single_intersection_half_trained_200000.zip")
+    model = DQN.load("dqn_single_intersection.zip")
     model.set_env(env)
     model.learn(total_timesteps=100000)
-    # Save the model
-    model.save("dqn_single_intersection_half_trained_300000.zip")
+

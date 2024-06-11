@@ -252,8 +252,9 @@ class SumoEnvironment(gym.Env):
         self.metrics = []
 
         if seed is not None:
-            self.sumo_seed = seed
-        
+            self.sumo_seed = seed + 1
+            
+        # 添加时间戳，以应对episode与timestep不一致的问题
         if self.additional_sumo_cmd is not None:
             parts = self.additional_sumo_cmd.split(".xml")
             timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
