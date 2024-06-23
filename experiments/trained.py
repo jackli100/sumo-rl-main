@@ -18,7 +18,7 @@ from sumo_rl import SumoEnvironment
 
 if __name__ == "__main__":
     # 修改这个变量
-    output_folder = "outputs/dqn-0622-6"
+    output_folder = "outputs/dqn-0623-t1"
 
     # 维持默认即可
     csv_name = "dqn"
@@ -28,8 +28,8 @@ if __name__ == "__main__":
     tripinfo_cmd = f"--tripinfo {tripinfo_output_name}"
 
     env = SumoEnvironment(
-        net_file="sumo_rl/nets/2way-single-intersection/single-intersection-3.net.xml",
-        route_file="sumo_rl/nets/2way-single-intersection/single-intersection-vhvh.rou.xml",
+        net_file="sumo_rl/nets/2way-single-intersection/single-intersection-2.net.xml",
+        route_file=r"D:\trg1vr\sumo-rl-main\sumo-rl-main\output.rou.xml",
         out_csv_name=out_csv_name,
         single_agent=True,
         use_gui=False,
@@ -39,6 +39,6 @@ if __name__ == "__main__":
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
     # 加载模型
-    model = DQN.load("dqn_single_intersection.zip")
+    model = DQN.load(r"D:\trg1vr\sumo-rl-main\sumo-rl-main\outputs\dqn-20240623-1151-1\model.zip")
     model.set_env(env)
-    model.learn(total_timesteps=500000)
+    model.learn(total_timesteps=200000)

@@ -28,7 +28,7 @@ if __name__ == "__main__":
     tripinfo_cmd = f"--tripinfo {tripinfo_output_name}"
 
     env = SumoEnvironment(
-        net_file="sumo_rl/nets/2way-single-intersection/single-intersection-4.net.xml",
+        net_file="sumo_rl/nets/2way-single-intersection/single-intersection-2.net.xml",
         route_file="sumo_rl/nets/2way-single-intersection/single-intersection-vhvh.rou.xml",
         out_csv_name=out_csv_name,
         single_agent=True,
@@ -56,3 +56,4 @@ if __name__ == "__main__":
     model_save_path=os.path.join(output_folder, "model.zip")
     model.save(model_save_path)
     
+   

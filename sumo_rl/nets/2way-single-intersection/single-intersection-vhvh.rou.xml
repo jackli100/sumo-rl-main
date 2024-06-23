@@ -1,8 +1,5 @@
 <routes>
   <vType accel="2.6" decel="4.5" id="CarA" length="5.0" minGap="2.5" maxSpeed="55.55" sigma="0.5" />
-  <vType accel="2.0" decel="6.0" id="CarB" length="7.5" minGap="2.5" maxSpeed="50.0" sigma="0.5" />
-  <vType accel="1.0" decel="5.0" id="CarC" length="5.0" minGap="2.5" maxSpeed="40.0" sigma="0.5" />
-  <vType accel="1.0" decel="5.0" id="CarD" length="7.5" minGap="2.5" maxSpeed="30.0" sigma="0.5" />
   <route id="route01" edges="n_t t_s"/>
   <route id="route02" edges="n_t t_w"/>
   <route id="route03" edges="n_t t_e"/>
