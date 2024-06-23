@@ -33,7 +33,7 @@ if __name__ == "__main__":
         out_csv_name=out_csv_name,
         single_agent=True,
         use_gui=False,
-        num_seconds=100000,
+        num_seconds=200,
     )
     # 创建结果文件夹
     if not os.path.exists(output_folder):
@@ -51,7 +51,7 @@ if __name__ == "__main__":
         verbose=1,
     )
 
-    model.learn(total_timesteps=500000)
+    model.learn(total_timesteps=1000)
     # Save the model
     model_save_path=os.path.join(output_folder, "model.zip")
     model.save(model_save_path)

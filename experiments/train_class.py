@@ -116,14 +116,18 @@ class Train:
         print(f"Loaded params: {params}")
         return params
     
+    def print_test(self):
+        print(self.out_csv_name)
+
     def train(self):
+        
         env = SumoEnvironment(
             net_file=self.net_file,
             route_file=self.route_file,
             out_csv_name=self.out_csv_name,
             single_agent=True,
             use_gui=False,
-            num_seconds=int(self.total_timesteps/5), 
+            num_seconds=int(self.total_timesteps/6), 
         )
     
         model = DQN(
@@ -226,7 +230,9 @@ def generate_result_folder():
     hour = now.strftime("%H")
     minute = now.strftime("%M")
     # 生成文件夹名称
-    result_folder = f"outputs/dqn-{hour}-{minute}"
+    folder_name = f"dqn-{hour}-{minute}"
+    # 使用 os.path.join 构建路径
+    result_folder = os.path.join("outputs", folder_name)
     
     # 如果文件夹不存在则创建
     os.makedirs(result_folder, exist_ok=True)
@@ -247,7 +253,7 @@ if __name__ == "__main__":
     # step 2: train the model
     route_path = matrix.output_file
     net_path = r"D:\trg1vr\sumo-rl-main\sumo-rl-main\sumo_rl\nets\2way-single-intersection\single-intersection-2.net.xml"
-    total_timesteps = 10000
+    total_timesteps = 1000
     hyper_para_csv = "experiments/hyper_para.csv"
     train = Train(hyper_para_csv, result_folder, net_path, route_path, total_timesteps)
     train.train()
