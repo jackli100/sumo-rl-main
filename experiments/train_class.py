@@ -1,5 +1,7 @@
 import numpy as np
 import pandas as pd
+import random
+import string
 import csv
 import asyncio
 import xml.etree.ElementTree as ET
@@ -93,7 +95,7 @@ class TrafficMatrix:
         print(f"Volumes: {self.volumes}")
 
 class Train:
-    def __init__(self, hyper_para_csv, output_folder, net_file, route_file, total_timesteps):
+    def __init__(self, hyper_para_csv, output_folder, net_file, route_file, total_timesteps, trained_model=None, num_of_episodes=10):
         self.output_folder = output_folder
         self.hyper_para_csv = hyper_para_csv
         self.params = self._load_params_from_csv()
@@ -107,50 +109,63 @@ class Train:
         self.tripinfo_cmd = f"--tripinfo {self.tripinfo_output_name}"
         self.total_timesteps = total_timesteps
         self.model_save_path = os.path.join(output_folder, "model.zip")
+        self.num_of_episodes = num_of_episodes
+        self.env = SumoEnvironment(
+            net_file=self.net_file,
+            route_file=self.route_file,
+            out_csv_name=self.out_csv_name,
+            single_agent=True,
+            use_gui=False,
+            num_seconds=int(self.total_timesteps/self.num_of_episodes), 
+            sumo_seed=10
+        )
+        print("I set sumo seed to 10")
+        self.trained_model = trained_model
+        
 
 
     def _load_params_from_csv(self):
         with open(self.hyper_para_csv, "r", encoding='utf-8') as f:
             reader = csv.reader(f)
             params = [row[1] for row in reader if row]
-        print(f"Loaded params: {params}")
+
         return params
     
     def print_test(self):
         print(self.out_csv_name)
 
     def train(self):
-        
-        env = SumoEnvironment(
-            net_file=self.net_file,
-            route_file=self.route_file,
-            out_csv_name=self.out_csv_name,
-            single_agent=True,
-            use_gui=False,
-            num_seconds=int(self.total_timesteps/6), 
-        )
-    
-        model = DQN(
-            env=env,
-            policy="MlpPolicy",
-            learning_rate = float(self.params[0]),
-            learning_starts = int(self.params[1]),
-            train_freq = int(self.params[2]),
-            target_update_interval = int(self.params[3]),
-            exploration_initial_eps = float(self.params[4]),
-            exploration_final_eps = float(self.params[5]),
-            verbose = int(self.params[6])
-        )   
+           
+        if self.trained_model:
+            model = DQN.load(self.trained_model)
+            # Set the environment
+            model.set_env(self.env)
+        else:
+            model = DQN(
+                env=self.env,
+                policy="MlpPolicy",
+                learning_rate = float(self.params[0]),
+                learning_starts = int(self.params[1]),
+                train_freq = int(self.params[2]),
+                target_update_interval = int(self.params[3]),
+                exploration_initial_eps = float(self.params[4]),
+                exploration_final_eps = float(self.params[5]),
+                exploration_fraction = float(self.params[6]),
+                verbose = int(self.params[7])
+            )   
 
         model.learn(total_timesteps=self.total_timesteps)
         # Save the model
         model.save(self.model_save_path)
+        self.env.reset()
     
 class ShowResults:
-    def __init__(self, result_folder, log_file_path, metric):
+    def __init__(self, result_folder, log_file_path, metric, first_episode=1, last_episode=7):
         self.result_folder = result_folder
         self.log_file_path = log_file_path
         self.metric = metric
+        self.first_episode = first_episode
+        self.last_episode = last_episode
 
     def read_and_concatenate_csv(self, file_paths):
         dfs = []
@@ -185,7 +200,7 @@ class ShowResults:
 
             # Find the relevant CSV files in the result folder
             file_prefix = "dqn_conn0_ep"
-            file_paths = [os.path.join(self.result_folder, f"{file_prefix}{i}.csv") for i in range(1, 7)]
+            file_paths = [os.path.join(self.result_folder, f"{file_prefix}{i}.csv") for i in range(self.first_episode, self.last_episode+1)]
             
             # Ensure all file paths exist
             for file_path in file_paths:
@@ -223,43 +238,49 @@ class ShowResults:
             log_file.write("Execution finished at {}\n".format(datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
     
 
+
+import asyncio
+import os
+import random
+import string
+from datetime import datetime
+
+# 假设 TrafficMatrix, Train, 和 ShowResults 类已经定义好了
+
 def generate_result_folder():
     # 获取当前时间
     now = datetime.now()
-    # 格式化时间为小时和分钟
-    hour = now.strftime("%H")
-    minute = now.strftime("%M")
+    # 格式化时间为日期、小时、分钟和秒
+    date = now.strftime("%Y-%m-%d")
+    time = now.strftime("%H-%M-%S")
+    # 生成随机字符串
+    random_str = ''.join(random.choices(string.ascii_letters + string.digits, k=6))
     # 生成文件夹名称
-    folder_name = f"dqn-{hour}-{minute}"
+    folder_name = f"{time}-{random_str}"
     # 使用 os.path.join 构建路径
-    result_folder = os.path.join("outputs", folder_name)
+    result_folder = os.path.join("outputs", date, folder_name)
     
     # 如果文件夹不存在则创建
     os.makedirs(result_folder, exist_ok=True)
     
     return result_folder
 
-# 创建程序实例并运行
 if __name__ == "__main__":
 
     result_folder = generate_result_folder()
     log_file_path = os.path.join(result_folder, 'output_log.txt')
-    proportion_of_saturations = [0.75, 0.75, 0.75, 0.75]
-    
-    # step 1: generate the traffic matrix
+    proportion_of_saturations = [0.85, 0.65, 0.85, 0.65]
     matrix = TrafficMatrix(proportion_of_saturations, result_folder)
     matrix.create_xml()
-    
-    # step 2: train the model
     route_path = matrix.output_file
-    net_path = r"D:\trg1vr\sumo-rl-main\sumo-rl-main\sumo_rl\nets\2way-single-intersection\single-intersection-2.net.xml"
+    net_path = r"D:\trg1vr\sumo-rl-main\sumo-rl-main\sumo_rl\nets\2way-single-intersection\single-intersection-4.net.xml"
     total_timesteps = 1000
     hyper_para_csv = "experiments/hyper_para.csv"
-    train = Train(hyper_para_csv, result_folder, net_path, route_path, total_timesteps)
+    model_path = r"D:\trg1vr\sumo-rl-main\sumo-rl-main\outputs\2024-06-24\16-43-52-Cuqiel\model.zip"
+    num_of_episodes = 2
+    train = Train(hyper_para_csv, result_folder, net_path, route_path, total_timesteps, model_path, num_of_episodes=num_of_episodes)
     train.train()
-
-    # step 3: show the results
     metric = "system_total_waiting_time"
-    show_results = ShowResults(result_folder, log_file_path, metric)
+    show_results = ShowResults(result_folder, log_file_path, metric,1,num_of_episodes)
     show_results.main()
 

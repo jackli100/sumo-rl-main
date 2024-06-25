@@ -213,7 +213,9 @@ class SumoEnvironment(gym.Env):
         if self.sumo_seed == "random":
             sumo_cmd.append("--random")
         else:
-            sumo_cmd.extend(["--seed", str(self.sumo_seed)])
+            sumo_cmd.extend(["--seed", str(int(self.sumo_seed)+int(self.episode))])
+            print(f"seed: {int(self.sumo_seed)+int(self.episode)}")
+
         if not self.sumo_warnings:
             sumo_cmd.append("--no-warnings")
         if self.additional_sumo_cmd is not None:
@@ -243,17 +245,20 @@ class SumoEnvironment(gym.Env):
 
     def reset(self, seed: Optional[int] = None, **kwargs):
         """Reset the environment."""
+
         super().reset(seed=seed, **kwargs)
 
         if self.episode != 0:
             self.close()
             self.save_csv(self.out_csv_name, self.episode)
+            
         self.episode += 1
         self.metrics = []
 
         if seed is not None:
             self.sumo_seed = seed + 1
-            
+            with open(r"D:\trg1vr\sumo-rl-main\sumo-rl-main\seed.txt", "w") as f:
+                f.write(str(seed))
         # 添加时间戳，以应对episode与timestep不一致的问题
         if self.additional_sumo_cmd is not None:
             parts = self.additional_sumo_cmd.split(".xml")
@@ -551,6 +556,7 @@ class SumoEnvironmentPZ(AECEnv, EzPickle):
 
     def reset(self, seed: Optional[int] = None, options: Optional[dict] = None):
         """Reset the environment."""
+
         self.env.reset(seed=seed, options=options)
         self.agents = self.possible_agents[:]
         self.agent_selection = self._agent_selector.reset()

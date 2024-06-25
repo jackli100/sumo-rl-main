@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+<routes>
+  <vType accel="2.6" decel="4.5" id="CarA" length="5.0" minGap="2.5" maxSpeed="55.55" sigma="0.5"/>
+  <route id="route01" edges="n_t t_s"/>
+  <route id="route02" edges="n_t t_w"/>
+  <route id="route03" edges="n_t t_e"/>
+  <route id="route04" edges="s_t t_n"/>
+  <route id="route05" edges="s_t t_w"/>
+  <route id="route06" edges="s_t t_e"/>
+  <route id="route07" edges="w_t t_e"/>
+  <route id="route08" edges="w_t t_s"/>
+  <route id="route09" edges="w_t t_n"/>
+  <route id="route10" edges="e_t t_w"/>
+  <route id="route11" edges="e_t t_s"/>
+  <route id="route12" edges="e_t t_n"/>
+  <flow id="flow01" begin="0" end="100000" period="exp(0.094)" route="route01" type="CarA" color="1,1,0"/>
+  <flow id="flow02" begin="0" end="100000" period="exp(0.068)" route="route02" type="CarA" color="1,1,0"/>
+  <flow id="flow03" begin="0" end="100000" period="exp(0.064)" route="route03" type="CarA" color="1,1,0"/>
+  <flow id="flow04" begin="0" end="100000" period="exp(0.094)" route="route04" type="CarA" color="1,1,0"/>
+  <flow id="flow05" begin="0" end="100000" period="exp(0.064)" route="route05" type="CarA" color="1,1,0"/>
+  <flow id="flow06" begin="0" end="100000" period="exp(0.068)" route="route06" type="CarA" color="1,1,0"/>
+  <flow id="flow07" begin="0" end="100000" period="exp(0.094)" route="route07" type="CarA" color="1,1,0"/>
+  <flow id="flow08" begin="0" end="100000" period="exp(0.068)" route="route08" type="CarA" color="1,1,0"/>
+  <flow id="flow09" begin="0" end="100000" period="exp(0.064)" route="route09" type="CarA" color="1,1,0"/>
+  <flow id="flow10" begin="0" end="100000" period="exp(0.094)" route="route10" type="CarA" color="1,1,0"/>
+  <flow id="flow11" begin="0" end="100000" period="exp(0.064)" route="route11" type="CarA" color="1,1,0"/>
+  <flow id="flow12" begin="0" end="100000" period="exp(0.068)" route="route12" type="CarA" color="1,1,0"/>
+</routes>
