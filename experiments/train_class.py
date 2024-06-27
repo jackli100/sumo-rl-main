@@ -31,7 +31,7 @@ class TrafficMatrix:
         self.prop = proportion_of_saturations
         self.capacity_straight = 2080
         self.capacity_left = 1411
-        self.capacity_right = 1513
+        self.capacity_right = 1411
         self.green_time_proportion = (30 - 4) / 120
         self.convert_to_seconds = 1/3600
         self.volumes = self._generate_volumes()
@@ -95,10 +95,9 @@ class TrafficMatrix:
         print(f"Volumes: {self.volumes}")
 
 class Train:
-    def __init__(self, hyper_para_csv, output_folder, net_file, route_file, total_timesteps, trained_model=None, num_of_episodes=10):
+    def __init__(self, output_folder, net_file, route_file, total_timesteps, trained_model=None, num_of_episodes=10, seed=10, fix_seed=False, \
+                 learning_rate=0.0001, learning_starts=0, train_freq=1, target_update_interval=2000, exploration_initial_eps=0.05, exploration_final_eps=0.01, verbose=1):
         self.output_folder = output_folder
-        self.hyper_para_csv = hyper_para_csv
-        self.params = self._load_params_from_csv()
         self.net_file = net_file
         self.route_file = route_file
         self.csv_name = "dqn"
@@ -110,6 +109,8 @@ class Train:
         self.total_timesteps = total_timesteps
         self.model_save_path = os.path.join(output_folder, "model.zip")
         self.num_of_episodes = num_of_episodes
+        self.seed = seed
+        self.fix_seed = fix_seed
         self.env = SumoEnvironment(
             net_file=self.net_file,
             route_file=self.route_file,
@@ -117,22 +118,43 @@ class Train:
             single_agent=True,
             use_gui=False,
             num_seconds=int(self.total_timesteps/self.num_of_episodes), 
-            sumo_seed=10
+            sumo_seed=self.seed,
+            fixed_seed=self.fix_seed
         )
-        print("I set sumo seed to 10")
         self.trained_model = trained_model
+        self.learning_rate = learning_rate
+        self.learning_starts = learning_starts
+        self.train_freq = train_freq
+        self.target_update_interval = target_update_interval
+        self.exploration_initial_eps = exploration_initial_eps
+        self.exploration_final_eps = exploration_final_eps
+        self.verbose = verbose
+
+   
         
 
 
-    def _load_params_from_csv(self):
-        with open(self.hyper_para_csv, "r", encoding='utf-8') as f:
-            reader = csv.reader(f)
-            params = [row[1] for row in reader if row]
-
-        return params
-    
-    def print_test(self):
-        print(self.out_csv_name)
+   
+    def print_hyperparameters(self):
+        with open(os.path.join(self.output_folder, "hyperparameters.txt"), "w") as f:  
+            f.write(f"total_timesteps: {self.total_timesteps}\n")
+            f.write(f"model_save_path: {self.model_save_path}\n")
+            f.write(f"num_of_episodes: {self.num_of_episodes}\n")
+            f.write(f"seed: {self.seed}\n")
+            f.write(f"net_file: {self.net_file}\n")
+            f.write(f"route_file: {self.route_file}\n")
+            f.write(f"out_csv_name: {self.out_csv_name}\n")
+            f.write("fixed_seed: {}\n".format(self.fix_seed))
+            f.write(f"tripinfo_output_name: {self.tripinfo_output_name}\n")
+            f.write(f"tripinfo_cmd: {self.tripinfo_cmd}\n")
+            f.write(f"trained_model: {self.trained_model}\n")
+            f.write(f"learning_rate: {self.learning_rate}\n")
+            f.write(f"learning_starts: {self.learning_starts}\n")
+            f.write(f"train_freq: {self.train_freq}\n")
+            f.write(f"target_update_interval: {self.target_update_interval}\n")
+            f.write(f"exploration_initial_eps: {self.exploration_initial_eps}\n")
+            f.write(f"exploration_final_eps: {self.exploration_final_eps}\n")
+            f.write(f"verbose: {self.verbose}\n")
 
     def train(self):
            
@@ -144,15 +166,14 @@ class Train:
             model = DQN(
                 env=self.env,
                 policy="MlpPolicy",
-                learning_rate = float(self.params[0]),
-                learning_starts = int(self.params[1]),
-                train_freq = int(self.params[2]),
-                target_update_interval = int(self.params[3]),
-                exploration_initial_eps = float(self.params[4]),
-                exploration_final_eps = float(self.params[5]),
-                exploration_fraction = float(self.params[6]),
-                verbose = int(self.params[7])
-            )   
+                learning_rate=self.learning_rate,
+                learning_starts=self.learning_starts,
+                train_freq=self.train_freq,
+                target_update_interval=self.target_update_interval,
+                exploration_initial_eps=self.exploration_initial_eps,
+                exploration_final_eps=self.exploration_final_eps,
+                verbose=self.verbose
+            )
 
         model.learn(total_timesteps=self.total_timesteps)
         # Save the model
@@ -241,11 +262,49 @@ class ShowResults:
 
 import asyncio
 import os
-import random
 import string
 from datetime import datetime
 
 # 假设 TrafficMatrix, Train, 和 ShowResults 类已经定义好了
+
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
+from email import encoders
+import os
+from datetime import datetime
+
+class EmailSender:
+    def __init__(self, username, auth_code):
+        self.server = 'smtp.qq.com'
+        self.port = 465  # SSL端口
+        self.username = username
+        self.auth_code = auth_code
+
+    def send_email(self, recipient, subject, body, attachments=None):
+        # 创建邮件对象
+        msg = MIMEMultipart()
+        msg['From'] = self.username
+        msg['To'] = recipient
+        msg['Subject'] = subject
+        msg.attach(MIMEText(body, 'plain'))
+
+        # 添加附件
+        if attachments:
+            for file_path in attachments:
+                part = MIMEBase('application', 'octet-stream')
+                with open(file_path, 'rb') as file:
+                    part.set_payload(file.read())
+                encoders.encode_base64(part)
+                part.add_header('Content-Disposition', f'attachment; filename={os.path.basename(file_path)}')
+                msg.attach(part)
+
+        # 连接到 SMTP 服务器
+        with smtplib.SMTP_SSL(self.server, self.port) as server:
+            server.login(self.username, self.auth_code)
+            server.send_message(msg)
+            print("Email sent successfully!")
 
 def generate_result_folder():
     # 获取当前时间
@@ -253,10 +312,8 @@ def generate_result_folder():
     # 格式化时间为日期、小时、分钟和秒
     date = now.strftime("%Y-%m-%d")
     time = now.strftime("%H-%M-%S")
-    # 生成随机字符串
-    random_str = ''.join(random.choices(string.ascii_letters + string.digits, k=6))
     # 生成文件夹名称
-    folder_name = f"{time}-{random_str}"
+    folder_name = f"{time}"
     # 使用 os.path.join 构建路径
     result_folder = os.path.join("outputs", date, folder_name)
     
@@ -265,22 +322,46 @@ def generate_result_folder():
     
     return result_folder
 
-if __name__ == "__main__":
+def get_files_to_send(result_folder):
+    # 获取 result_folder 中所有的 .png 和 .txt 文件
+    files = []
+    for root, _, filenames in os.walk(result_folder):
+        for filename in filenames:
+            if filename.endswith('.png') or filename.endswith('.txt'):
+                files.append(os.path.join(root, filename))
+    return files
 
+if __name__ == "__main__":
     result_folder = generate_result_folder()
     log_file_path = os.path.join(result_folder, 'output_log.txt')
-    proportion_of_saturations = [0.85, 0.65, 0.85, 0.65]
+    proportion_of_saturations = [0.75, 0.75, 0.75, 0.75]
     matrix = TrafficMatrix(proportion_of_saturations, result_folder)
     matrix.create_xml()
     route_path = matrix.output_file
-    net_path = r"D:\trg1vr\sumo-rl-main\sumo-rl-main\sumo_rl\nets\2way-single-intersection\single-intersection-4.net.xml"
+    net_path = r"D:\trg1vr\sumo-rl-main\sumo-rl-main\sumo_rl\nets\2way-single-intersection\single-intersection-2.net.xml"
     total_timesteps = 1000
-    hyper_para_csv = "experiments/hyper_para.csv"
-    model_path = r"D:\trg1vr\sumo-rl-main\sumo-rl-main\outputs\2024-06-24\16-43-52-Cuqiel\model.zip"
-    num_of_episodes = 2
-    train = Train(hyper_para_csv, result_folder, net_path, route_path, total_timesteps, model_path, num_of_episodes=num_of_episodes)
+    model_path = r"D:\trg1vr\sumo-rl-main\sumo-rl-main\outputs\2024-06-25\14-59-01-Vw1OU1\model.zip"
+    num_of_episodes = 10
+    fix_seed = False
+    train = Train(result_folder, net_path, route_path, total_timesteps, model_path, num_of_episodes=num_of_episodes, seed=24, fix_seed=fix_seed,\
+                  learning_rate=0.0001, learning_starts=0, train_freq=1, target_update_interval=2000, exploration_initial_eps=0.5, exploration_final_eps=0.01, verbose=1)
+    train.print_hyperparameters()
     train.train()
     metric = "system_total_waiting_time"
-    show_results = ShowResults(result_folder, log_file_path, metric,1,num_of_episodes)
+    show_results = ShowResults(result_folder, log_file_path, metric,1,int(num_of_episodes+1))
     show_results.main()
+
+    # 邮件发送配置
+    sender_email = '1811743445@qq.com'
+    auth_code = 'zbfuppehtwtkejfg'
+    recipient_email = 'zl22n23@soton.ac.uk'
+    subject = 'Training Results'
+    body = 'Please find the attached result files from the latest training run.'
+
+    # 获取要发送的文件
+    files_to_send = get_files_to_send(result_folder)
+
+    # 发送邮件
+    email_sender = EmailSender(sender_email, auth_code)
+    email_sender.send_email(recipient_email, subject, body, attachments=files_to_send)
 

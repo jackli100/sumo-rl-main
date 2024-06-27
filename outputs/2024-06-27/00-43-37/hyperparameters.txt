@@ -1,0 +1,18 @@
+total_timesteps: 1000000
+model_save_path: outputs\2024-06-27\00-43-37\model.zip
+num_of_episodes: 10
+seed: 24
+net_file: D:\trg1vr\sumo-rl-main\sumo-rl-main\sumo_rl\nets\2way-single-intersection\single-intersection-2.net.xml
+route_file: outputs\2024-06-27\00-43-37\output.rou.xml
+out_csv_name: outputs\2024-06-27\00-43-37\dqn
+fixed_seed: False
+tripinfo_output_name: outputs\2024-06-27\00-43-37\tripinfos.xml
+tripinfo_cmd: --tripinfo outputs\2024-06-27\00-43-37\tripinfos.xml
+trained_model: None
+learning_rate: 0.0001
+learning_starts: 0
+train_freq: 1
+target_update_interval: 2000
+exploration_initial_eps: 0.05
+exploration_final_eps: 0.01
+verbose: 1

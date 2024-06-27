@@ -105,6 +105,7 @@ class SumoEnvironment(gym.Env):
         sumo_warnings: bool = True,
         additional_sumo_cmd: Optional[str] = None,
         render_mode: Optional[str] = None,
+        fixed_seed: bool = False,
     ) -> None:
         """Initialize the environment."""
         assert render_mode is None or render_mode in self.metadata["render_modes"], "Invalid render mode."
@@ -142,6 +143,7 @@ class SumoEnvironment(gym.Env):
         self.label = str(SumoEnvironment.CONNECTION_LABEL)
         SumoEnvironment.CONNECTION_LABEL += 1
         self.sumo = None
+        self.fix_seed = fixed_seed
 
         if LIBSUMO:
             traci.start([sumolib.checkBinary("sumo"), "-n", self._net])  # Start only to retrieve traffic light information
@@ -213,8 +215,12 @@ class SumoEnvironment(gym.Env):
         if self.sumo_seed == "random":
             sumo_cmd.append("--random")
         else:
-            sumo_cmd.extend(["--seed", str(int(self.sumo_seed)+int(self.episode))])
-            print(f"seed: {int(self.sumo_seed)+int(self.episode)}")
+            if self.fix_seed:
+                sumo_cmd.extend(["--seed", str(int(self.sumo_seed))])
+                print(f"seed: {int(self.sumo_seed)}")
+            else:
+                sumo_cmd.extend(["--seed", str(int(self.sumo_seed)+int(self.episode))])
+                print(f"seed: {int(self.sumo_seed)+int(self.episode)}")
 
         if not self.sumo_warnings:
             sumo_cmd.append("--no-warnings")

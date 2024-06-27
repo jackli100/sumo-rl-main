@@ -1,0 +1,6 @@
+Execution started at 2024-06-26 17:38:35
+Combined CSV saved to D:\trg1vr\sumo-rl-main\sumo-rl-main\outputs\2024-06-25\17-47-00\combined.csv
+Combined plot saved to D:\trg1vr\sumo-rl-main\sumo-rl-main\outputs\2024-06-25\17-47-00\system_total_waiting_time_combined.png
+Last episode plot saved to D:\trg1vr\sumo-rl-main\sumo-rl-main\outputs\2024-06-25\17-47-00\system_total_waiting_time_last_episode.png
+Average system_total_waiting_time for the last episode: 699.110
+Execution finished at 2024-06-26 17:39:17

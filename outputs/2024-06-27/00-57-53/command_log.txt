@@ -1,0 +1,1 @@
+D:\trg1vr\sumo-rl-main\sumo-rl-main\experiments\train_class2.py --num_of_episodes 10 --net_path D:\trg1vr\sumo-rl-main\sumo-rl-main\sumo_rl\nets\2way-single-intersection\single-intersection-3.net.xml --total_timesteps 1000000 --learning_rate 0.001

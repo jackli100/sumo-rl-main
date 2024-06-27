@@ -1,8 +1,7 @@
 <configuration>
     <input>
-        <net-file value="single-intersection-2.net.xml"/>
+        <net-file value="single-intersection-4.net.xml"/>
         <route-files value="test_conflict6.rou.xml"/>
-        <additional-files value="conflict6.add.xml"/>
     </input>
     <time>
         <begin value="0"/>

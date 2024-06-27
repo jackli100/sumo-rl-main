@@ -1,0 +1,6 @@
+Execution started at 2024-06-25 14:50:28
+Combined CSV saved to outputs\2024-06-25\14-10-00-jyZ5BM\combined.csv
+Combined plot saved to outputs\2024-06-25\14-10-00-jyZ5BM\system_total_waiting_time_combined.png
+Last episode plot saved to outputs\2024-06-25\14-10-00-jyZ5BM\system_total_waiting_time_last_episode.png
+Average system_total_waiting_time for the last episode: 911.256
+Execution finished at 2024-06-25 14:50:42

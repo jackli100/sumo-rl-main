@@ -45,7 +45,7 @@ class TensorboardCallback(BaseCallback):
         return True
 
 if __name__ == "__main__":
-    output_folder = "outputs/dqn-0622-7"
+    output_folder = "outputs/testtest"
     log_dir = os.path.join(output_folder, "logs")
 
     if not os.path.exists(output_folder):
@@ -65,7 +65,7 @@ if __name__ == "__main__":
         out_csv_name=out_csv_name,
         single_agent=True,
         use_gui=False,
-        num_seconds=10000,
+        num_seconds=100000,
     )
 
     model = DQN(
@@ -82,7 +82,7 @@ if __name__ == "__main__":
     )
 
     callback = TensorboardCallback(log_dir)
-    model.learn(total_timesteps=100000, callback=callback)
+    model.learn(total_timesteps=500000, callback=callback)
 
     model_save_path = os.path.join(output_folder, "model.zip")
     model.save(model_save_path)

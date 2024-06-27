@@ -111,9 +111,9 @@
     </edge>
 
     <tlLogic id="t" type="static" programID="0" offset="0">
-        <phase duration="33" state="GGGrrrGGGrrr"/>
+        <phase duration="33" state="GGgrrrGGgrrr"/>
         <phase duration='3' state='yyyyyyyyyyyy' />
-        <phase duration="33" state="rrrGGGrrrGGG"/>
+        <phase duration="33" state="rrrGGgrrrGGg"/>
         <phase duration='3' state='yyyyyyyyyyyy' />
         
     </tlLogic>
