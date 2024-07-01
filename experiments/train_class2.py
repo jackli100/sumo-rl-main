@@ -3,20 +3,22 @@ import os
 import sys
 from train_class import generate_result_folder, TrafficMatrix, Train, ShowResults, EmailSender  # 替换为实际模块名称
 
-def main(result_folder, proportion_of_saturations, net_path, total_timesteps, model_path, num_of_episodes, seed, fix_seed, learning_rate, learning_starts, train_freq, target_update_interval, exploration_initial_eps, exploration_final_eps, verbose):
+def main(result_folder, proportion_of_saturations, net_path, total_timesteps, model_path, num_of_episodes, seed, 
+         fix_seed, fixed_ts, learning_rate, learning_starts, train_freq, target_update_interval, exploration_initial_eps, exploration_final_eps, verbose,
+         tripinfo, emissioninfo):
     log_file_path = os.path.join(result_folder, 'output_log.txt')
     matrix = TrafficMatrix(proportion_of_saturations, result_folder)
     matrix.create_xml()
     route_path = matrix.output_file
 
-    train = Train(result_folder, net_path, route_path, total_timesteps, model_path, num_of_episodes=num_of_episodes, seed=seed, fix_seed=fix_seed, 
+    train = Train(result_folder, net_path, route_path, total_timesteps, model_path, num_of_episodes=num_of_episodes, seed=seed, fix_seed=fix_seed, fix_ts=fixed_ts,
                   learning_rate=learning_rate, learning_starts=learning_starts, train_freq=train_freq, target_update_interval=target_update_interval, 
-                  exploration_initial_eps=exploration_initial_eps, exploration_final_eps=exploration_final_eps, verbose=verbose)
+                  exploration_initial_eps=exploration_initial_eps, exploration_final_eps=exploration_final_eps, verbose=verbose, tripinfo=tripinfo, emissioninfo=emissioninfo)
     train.print_hyperparameters()
     train.train()
 
     metric = "system_total_waiting_time"
-    show_results = ShowResults(result_folder, log_file_path, metric, 1, int(num_of_episodes + 1))
+    show_results = ShowResults(result_folder, log_file_path, metric)
     show_results.main()
 
 def log_command_line_arguments(log_file_path):
@@ -45,6 +47,9 @@ if __name__ == "__main__":
     parser.add_argument('--seed', type=int, default=24, help='Random seed')
     # 使用 action='store_true' 和 action='store_false' 来处理布尔值参数
     parser.add_argument('--fix_seed', action='store_true', help='Fix seed yes or no')
+    parser.add_argument('--fix_ts', action='store_true', help='Fix signal yes or no')
+    parser.add_argument('--tripinfo', action='store_true', help='Print tripinfo yes or no')
+    parser.add_argument('--emissioninfo', action='store_true', help='Print emissioninfo yes or no')
     parser.add_argument('--learning_rate', type=float, default=0.0001, help='Learning rate')
     parser.add_argument('--learning_starts', type=int, default=0, help='Learning starts')
     parser.add_argument('--train_freq', type=int, default=1, help='Training frequency')
@@ -55,6 +60,7 @@ if __name__ == "__main__":
     parser.add_argument('--sender_email', type=str, default='1811743445@qq.com', help='Sender email address')
     parser.add_argument('--auth_code', type=str, default='zbfuppehtwtkejfg', help='Authorization code for the sender email')
     parser.add_argument('--recipient_email', type=str, default='zl22n23@soton.ac.uk', help='Recipient email address')
+    parser.add_argument('--note', type=str, default='', help='Note to include in the email')
 
     args = parser.parse_args()
 
@@ -66,14 +72,15 @@ if __name__ == "__main__":
     log_command_line_arguments(command_log_file_path)
 
     # 执行主要的训练和评估逻辑
-    main(result_folder, args.proportion_of_saturations, args.net_path, args.total_timesteps, args.model_path, args.num_of_episodes, args.seed, args.fix_seed, 
-         args.learning_rate, args.learning_starts, args.train_freq, args.target_update_interval, args.exploration_initial_eps, args.exploration_final_eps, args.verbose)
+    main(result_folder, args.proportion_of_saturations, args.net_path, args.total_timesteps, args.model_path, args.num_of_episodes, args.seed, args.fix_seed, args.fix_ts,
+         args.learning_rate, args.learning_starts, args.train_freq, args.target_update_interval, args.exploration_initial_eps, args.exploration_final_eps, args.verbose, 
+         args.tripinfo, args.emissioninfo)
 
     # 获取要发送的文件
     files_to_send = get_files_to_send(result_folder)
 
     # 发送邮件
     email_sender = EmailSender(args.sender_email, args.auth_code)
-    subject = 'Training Results'
+    subject = f'Training Results {args.note}'
     body = 'Please find the attached result files from the latest training run.'
     email_sender.send_email(args.recipient_email, subject, body, attachments=files_to_send)

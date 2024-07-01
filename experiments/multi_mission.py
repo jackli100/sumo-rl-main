@@ -10,8 +10,12 @@ if __name__ == "__main__":
         ["python", r"D:\trg1vr\sumo-rl-main\sumo-rl-main\experiments\train_class2.py",
          '--num_of_episodes', '10',
          '--net_path', r"D:\trg1vr\sumo-rl-main\sumo-rl-main\sumo_rl\nets\2way-single-intersection\single-intersection-3.net.xml",
-         '--total_timesteps', '500000',
-         '--proportion_of_saturations', '0.5,0.5,0.5,0.5'],          
+         '--total_timesteps', '5000',
+         '--fix_ts',
+         '--tripinfo',
+            '--emissioninfo',
+         '--proportion_of_saturations', '0.75,0.75,0.75,0.75',  
+         '--note', 'intersection-3, 0.75 saturation, fix ts']        
     ]
 
     # 运行命令

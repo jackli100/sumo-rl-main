@@ -106,6 +106,9 @@ class SumoEnvironment(gym.Env):
         additional_sumo_cmd: Optional[str] = None,
         render_mode: Optional[str] = None,
         fixed_seed: bool = False,
+        tripinfo:bool = False,
+        emissioninfo:bool = False,
+        output_folder:str = None,
     ) -> None:
         """Initialize the environment."""
         assert render_mode is None or render_mode in self.metadata["render_modes"], "Invalid render mode."
@@ -144,6 +147,10 @@ class SumoEnvironment(gym.Env):
         SumoEnvironment.CONNECTION_LABEL += 1
         self.sumo = None
         self.fix_seed = fixed_seed
+        self.tripinfo = tripinfo
+        self.emissioninfo = emissioninfo
+        self.output_folder = output_folder
+        
 
         if LIBSUMO:
             traci.start([sumolib.checkBinary("sumo"), "-n", self._net])  # Start only to retrieve traffic light information
@@ -219,11 +226,19 @@ class SumoEnvironment(gym.Env):
                 sumo_cmd.extend(["--seed", str(int(self.sumo_seed))])
                 print(f"seed: {int(self.sumo_seed)}")
             else:
+                # 假如不是固定seed，那么每次的seed都会加上episode，而不是取随机值
                 sumo_cmd.extend(["--seed", str(int(self.sumo_seed)+int(self.episode))])
                 print(f"seed: {int(self.sumo_seed)+int(self.episode)}")
 
         if not self.sumo_warnings:
             sumo_cmd.append("--no-warnings")
+        if self.emissioninfo:
+            sumo_cmd.extend(["--device.emissions.probability", "1.0"])  
+        if self.tripinfo:
+            tripinfo_path = os.path.join(self.output_folder, f"tripinfos-{self.episode}.xml")
+            sumo_cmd.extend(["--tripinfo-output", tripinfo_path])  # 保持原有的正确格式
+
+        
         if self.additional_sumo_cmd is not None:
             sumo_cmd.extend(self.additional_sumo_cmd.split())
         if self.use_gui or self.render_mode is not None:
