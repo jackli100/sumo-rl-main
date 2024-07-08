@@ -1,0 +1,12 @@
+Execution started at 2024-07-02 10:21:22
+Combined CSV saved to outputs\2024-07-02\10-21-17-1051\combined.csv
+Combined plot for system_total_stopped saved to outputs\2024-07-02\10-21-17-1051\system_total_stopped_combined.png
+Overall average system_total_stopped: 77.738
+Overall median system_total_stopped: 99.000
+Combined plot for system_total_waiting_time saved to outputs\2024-07-02\10-21-17-1051\system_total_waiting_time_combined.png
+Overall average system_total_waiting_time: 18233.530
+Overall median system_total_waiting_time: 10083.000
+Combined plot for system_mean_waiting_time saved to outputs\2024-07-02\10-21-17-1051\system_mean_waiting_time_combined.png
+Overall average system_mean_waiting_time: 155.050
+Overall median system_mean_waiting_time: 83.073
+Execution finished at 2024-07-02 10:21:23

@@ -1,0 +1,1 @@
+D:\trg1vr\sumo-rl-main\sumo-rl-main\experiments\test_class2.py --num_of_episodes 1 --model_path models\2-stage-0.85-2.zip --net_path D:\trg1vr\sumo-rl-main\sumo-rl-main\sumo_rl\nets\2way-single-intersection\single-intersection-3.net.xml --total_timesteps 100000 --tripinfo --seed 50 --emissioninfo --proportion_of_saturations 0.85,0.85,0.85,0.85 --note test models-stage-0.85-2.zip

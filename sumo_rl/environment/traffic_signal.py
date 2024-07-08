@@ -285,6 +285,8 @@ class TrafficSignal:
         ts_wait = sum(self.get_accumulated_waiting_time_per_lane()) / 100.0
         reward = self.last_measure - ts_wait
         self.last_measure = ts_wait
+        with open('reward.txt', 'a') as f:
+            f.write(str(reward) + '\n')
         return reward
 
     def _observation_fn_default(self):
@@ -305,17 +307,19 @@ class TrafficSignal:
         for lane in self.lanes:
             veh_list = self.sumo.lane.getLastStepVehicleIDs(lane)
             wait_time = 0.0
-            for veh in veh_list:
-                veh_lane = self.sumo.vehicle.getLaneID(veh)
-                acc = self.sumo.vehicle.getAccumulatedWaitingTime(veh)
-                if veh not in self.env.vehicles:
-                    self.env.vehicles[veh] = {veh_lane: acc}
-                else:
+            for veh in veh_list: # 如果veh在上一步的时候就已经在这个lane上了
+                veh_lane = self.sumo.vehicle.getLaneID(veh) # 获取车辆所在的lane
+                acc = self.sumo.vehicle.getAccumulatedWaitingTime(veh) # 获取车辆的等待时间
+                if veh not in self.env.vehicles: # 如果这个车辆不在这个环境的车辆列表中
+                    self.env.vehicles[veh] = {veh_lane: acc} # 就把这个车辆加进去，请注意，env.vehicles是一个字典，key是车辆的id，
+                                                             # value是一个字典，key是车辆所在的lane，value是车辆的等待时间
+                else: # 分为两种情况：1. 这个车辆在这个环境的车辆列表中，但是不在这个lane上，2. 这个车辆在这个环境的车辆列表中，而且在这个lane上
+                      # 对于第一种情况，就把这个车辆加进这个lane上，对于第二种情况，就把这个车辆的等待时间减去这个车辆在其他lane上的等待时间
                     self.env.vehicles[veh][veh_lane] = acc - sum(
-                        [self.env.vehicles[veh][lane] for lane in self.env.vehicles[veh].keys() if lane != veh_lane]
+                        [self.env.vehicles[veh][lane] for lane in self.env.vehicles[veh].keys() if lane != veh_lane] 
                     )
                 wait_time += self.env.vehicles[veh][veh_lane]
-            wait_time_per_lane.append(wait_time)
+            wait_time_per_lane.append(wait_time) 
         return wait_time_per_lane
 
     def get_average_speed(self) -> float:

@@ -1,0 +1,166 @@
+[
+    {
+        "Parameter": "proportion_of_saturations",
+        "Value": "[0.7, 0.7, 0.7, 0.7]"
+    },
+    {
+        "Parameter": "net_path",
+        "Value": "sumo_rl/nets/2way-single-intersection/single-intersection-4.net.xml"
+    },
+    {
+        "Parameter": "total_timesteps",
+        "Value": "900000"
+    },
+    {
+        "Parameter": "model_path",
+        "Value": null
+    },
+    {
+        "Parameter": "num_of_episodes",
+        "Value": "9"
+    },
+    {
+        "Parameter": "seed",
+        "Value": "24"
+    },
+    {
+        "Parameter": "fix_seed",
+        "Value": "False"
+    },
+    {
+        "Parameter": "fix_ts",
+        "Value": "False"
+    },
+    {
+        "Parameter": "learning_rate",
+        "Value": "0.0001"
+    },
+    {
+        "Parameter": "learning_starts",
+        "Value": "0"
+    },
+    {
+        "Parameter": "train_freq",
+        "Value": "1"
+    },
+    {
+        "Parameter": "target_update_interval",
+        "Value": "2000"
+    },
+    {
+        "Parameter": "exploration_initial_eps",
+        "Value": "0.05"
+    },
+    {
+        "Parameter": "exploration_final_eps",
+        "Value": "0.01"
+    },
+    {
+        "Parameter": "verbose",
+        "Value": "1"
+    },
+    {
+        "Parameter": "tripinfo",
+        "Value": "False"
+    },
+    {
+        "Parameter": "emissioninfo",
+        "Value": "False"
+    },
+    {
+        "Parameter": "buffer_size",
+        "Value": "200000"
+    },
+    {
+        "Parameter": "batch_size",
+        "Value": "256"
+    },
+    {
+        "Parameter": "gamma",
+        "Value": "0.99"
+    },
+    {
+        "Parameter": "note",
+        "Value": "single-intersection-4.net.xml, 0.70,0.70,0.70,0.70 saturation"
+    },
+    {
+        "Parameter": "Combined CSV Path",
+        "Value": "/root/autodl-tmp/outputs/2024-07-03/08-02-54-2346/combined.csv"
+    },
+    {
+        "Parameter": "Combined Plot for system_total_stopped Path",
+        "Value": "/root/autodl-tmp/outputs/2024-07-03/08-02-54-2346/system_total_stopped_combined.png"
+    },
+    {
+        "Parameter": "Combined Plot for system_total_waiting_time Path",
+        "Value": "/root/autodl-tmp/outputs/2024-07-03/08-02-54-2346/system_total_waiting_time_combined.png"
+    },
+    {
+        "Parameter": "Combined Plot for system_mean_waiting_time Path",
+        "Value": "/root/autodl-tmp/outputs/2024-07-03/08-02-54-2346/system_mean_waiting_time_combined.png"
+    },
+    {
+        "Parameter": "Overall Average system_total_stopped",
+        "Value": "67.456"
+    },
+    {
+        "Parameter": "Overall Median system_total_stopped",
+        "Value": "71.000"
+    },
+    {
+        "Parameter": "Overall Average system_total_waiting_time",
+        "Value": "2001.539"
+    },
+    {
+        "Parameter": "Overall Median system_total_waiting_time",
+        "Value": "1759.000"
+    },
+    {
+        "Parameter": "Overall Average system_mean_waiting_time",
+        "Value": "19.017"
+    },
+    {
+        "Parameter": "Overall Median system_mean_waiting_time",
+        "Value": "16.368"
+    },
+    {
+        "Parameter": "Average system_total_waiting_time for episode 1",
+        "Value": "3261.011"
+    },
+    {
+        "Parameter": "Average system_total_waiting_time for episode 2",
+        "Value": "1382.986"
+    },
+    {
+        "Parameter": "Average system_total_waiting_time for episode 3",
+        "Value": "1846.827"
+    },
+    {
+        "Parameter": "Average system_total_waiting_time for episode 4",
+        "Value": "2289.127"
+    },
+    {
+        "Parameter": "Average system_total_waiting_time for episode 5",
+        "Value": "1855.267"
+    },
+    {
+        "Parameter": "Average system_total_waiting_time for episode 6",
+        "Value": "2248.762"
+    },
+    {
+        "Parameter": "Average system_total_waiting_time for episode 7",
+        "Value": "2010.124"
+    },
+    {
+        "Parameter": "Average system_total_waiting_time for episode 8",
+        "Value": "2051.6"
+    },
+    {
+        "Parameter": "Average system_total_waiting_time for episode 9",
+        "Value": "1492.849"
+    },
+    {
+        "Parameter": "Average system_total_waiting_time for episode 10",
+        "Value": "1567.338"
+    }
+]
